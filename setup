@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Format and mount drives
+mkfs.fat -F32 /dev/sda1
+mkfs.ext4 /dev/sda2
+mount /dev/sda2 /mnt
+mkdir /mnt/boot
+mount /dev/sda1 /mnt/boot
+
+# Edit and update pacman.conf
+nano /etc/pacman.conf
+pacman -Syy
+
+# Installing base packages
+pacstrap /mnt base base-devel linux linux-firmware nano networkmanager
+
+genfstab -U /mnt >> /mnt/etc/fstab
+
+arch-chroot /mnt
